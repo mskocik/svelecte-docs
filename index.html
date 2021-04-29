@@ -102,8 +102,8 @@
 
             <p class="mt-2">
               <span>Documentation for:</span>
-              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.1.0-green" alt="svelecte version" class="middle-img"></a>
-              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.0.0-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.2.0-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.2.0-green" alt="svelecte version" class="middle-img"></a>
             </p>
 
             <hr>
@@ -120,6 +120,7 @@
               <li class="mt-0">virtual list support</li>
               <li class="mt-0">usable as custom element</li>
               <li class="mt-0">i18n support</li>
+              <li class="mt-0">SSR support</li>
             </ul>
 
             <h3 id="intro">Getting started</h3>
@@ -464,20 +465,28 @@ const OPTION_LIST = [
                 <div id="example-9" class="example-wrap"></div>
 
                 <p>Quite common scenario when one select (child) depends on another (parent) and when parent is
-                  selected,
-                  you need to fetchdata child dataset. Svelecte supports this use-case directly.</p>
+                  selected, you need to fetch data child dataset. Svelecte supports this use-case directly.
+                </p>
 
                 <details class="mt-2">
 
-                  <summary class="label label-rounded c-hand">Related DOM attributes:</summary>
+                  <summary class="label label-rounded c-hand">Related DOM attributes (on child select):</summary>
                   <div class="mt-2">
-
                     <dl>
                       <dt><span class="label">parent:</span> <code>string</code></dt>
                       <dd>DOM <code>id</code> property of parent select. This attribute should be defined on
                         <em>child</em> svelecte element.
                         <br>
                         Note that child is disabled automatically when parent has no selection.
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt><span class="label">fetch:</span> <code>string</code></dt>
+                      <dd>
+                        When defining <code>fetch</code> property on child select, specify <code>[parent]</code>
+                        placeholder, which will contain value from parent select when selected.
+                        <br>
+                        You can also combine <code>[parent]</code> and <code>[query]</code> placeholder.
                       </dd>
                     </dl>
                   </div>
