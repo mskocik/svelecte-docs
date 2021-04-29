@@ -22,7 +22,8 @@
       'dotted',       // defined in example 09
       'color-blocks'  // defined in example 04
     ],
-    json: []          // no additional renderers
+    json: [],         // no additional renderers,
+    tags: []
   };
 
 
@@ -35,7 +36,8 @@
     countries: '🌍',
     groups: '🔠',
     colors: '⚡',
-    json: '🙋'
+    json: '🙋',
+    tags: '🔖'
   }
 
   let cmp;
@@ -57,7 +59,8 @@
     { value: 'countries', text: '🌍 Countries'},
     { value: 'groups', text: '🔠 Country (groups)'},
     { value: 'colors', text: '⚡ Colors <small class="label label-primary">API</small>'},
-    { value: 'json', text: '🙋 Users <small class="label label-primary">API</small>'}
+    { value: 'json', text: '🙋 Users <small class="label label-primary">API</small>'},
+    { value: 'tags', text: '🔖 Empty list'}
   ]
   $: slot = slots[remoteValue] || '🚫';
   let remoteValue = null;
@@ -67,7 +70,6 @@
 
   let prevRemoteValue = remoteValue;
   $: {
-    console.log('s', remoteValue);
     if (prevRemoteValue !== remoteValue) {
       myValue = multiple ? [] : null;
       setRemote();
@@ -116,7 +118,7 @@
         fetch: null,
         placeholder: 'Select from country group',
       }
-    } else {
+    } else if (['json', 'colors'].includes(remoteValue)) {
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab,
@@ -128,6 +130,18 @@
         fetchCallback: remoteValue === 'json' ? fetchCallback : null,
         placeholder: remoteValue === 'json' ? 'Select from prefetched list' : 'Search for color',
         renderer: remoteValue === 'json' ? 'avatar' : null,
+        options: []
+      }
+    } else if (remoteValue === 'tags') {
+      settings = {
+        multiple, max, collapseSelection,
+        searchable, clearable, selectOnTab, placeholder,
+        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        style,
+        class: classSelection,
+        fetch: null,
+        fetchCallback: null,
+        renderer: null,
         options: []
       }
     }
@@ -176,6 +190,19 @@
     }, 300);
   }
 
+  function onPresetCreatableOnly() {
+    creatable = true;
+    multiple = true;
+    max = 0;
+    isFlexWidth = false;
+    dataSrc = optionsList[optionsList.length - 1];
+    disabled = false;
+    placeholder = 'Create!';
+    setTimeout(() => {
+      document.querySelector('#example-7 input').focus();
+    }, 300);
+  }
+
   addFormatter('avatar', fetchRenderer);
 </script>
 
@@ -189,7 +216,15 @@
       </Svelecte>
       Current value: {JSON.stringify(myValue)}
 
-      <p class="mt-2">Complete playground with almost options available. Try for example <button on:click={onPresetCollapsible}>collapsible multiselection</button></p>
+      <p class="mt-2">Complete playground with almost options available. Try for example: </p>
+      <ul>
+        <li>
+          <button class="btn btn-sm" on:click={onPresetCollapsible}>collapsible multiselection</button>
+        </li>
+        <li>
+          <button class="btn btn-sm" on:click={onPresetCreatableOnly}>creatable (create your tags)</button>
+        </li>
+      </ul>
     </div>
 
     <p class="mt-2">
@@ -330,9 +365,6 @@ when creating new items">
     height: 40px;
     padding-top: 10px !important;
     text-align: left;
-  }
-  details {
-    margin-top: 1rem;
   }
   fieldset {
     border: 1px solid #ccc;

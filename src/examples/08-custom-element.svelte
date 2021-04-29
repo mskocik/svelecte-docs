@@ -23,9 +23,22 @@
   function onSubmit() {
     /** here the svelecte is defined */
     const el = document.createElement('el-svelecte');
-    el.options = dataset[optionList]();
+    el.options = optionList === 'tags' ? [] : dataset[optionList]();
     el.renderer = optionRenderer;
-    el.onchange = e => e.detail && alert(e.detail.value);
+    if (optionList === 'tags' ) {
+      el.creatable = true;
+      el.multiple = true;
+    }
+    el.onchange = e => {
+      e.detail && alert(Array.isArray(e.detail) 
+        ? e.detail.reduce((res, opt) => {
+          res.push(opt.value);
+            return res;
+          }, []) .join(', ')
+        : e.detail.value
+      );
+      console.log(e.detail);
+    }
     /** that's all! */
 
     container.insertBefore(el, container.lastElementChild);
@@ -52,6 +65,7 @@
       <option value="colors">Colors</option>
       <option value="countries">Countries</option>
       <option value="countryGroups">Groups</option>
+      <option value="tags">Tags (cretable)</option>
     </select>
     <select bind:value={optionRenderer}>
       <option value="">Default renderer</option>
