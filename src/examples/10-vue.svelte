@@ -23,8 +23,8 @@
             <el-svelecte :options="opts"  @change="onChange"
               :value="selected"
               :placeholder="placeholder"
-              value-field="hex"
               multiple creatable
+              label-as-value
             ></el-svelecte>
           </div>
           <div>Selection: {{ selected }}</div>
