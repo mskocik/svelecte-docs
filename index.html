@@ -102,8 +102,8 @@
 
             <p class="mt-2">
               <span>Documentation for:</span>
-              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.2.3-green" alt="svelecte version" class="middle-img"></a>
-              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.2.4-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.3.0-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.3.0-green" alt="svelecte version" class="middle-img"></a>
             </p>
 
             <hr>
@@ -269,7 +269,7 @@
                   <dl>
                     <dt>
                       <span class="label">renderer:</span>
-                      <code>string | fn(item : object|string, isSelected: bool) -> string</code>
+                      <code>string | fn(item : object|string, isSelected: bool, inputValue: string) -> string</code>
                     </dt>
                     <dd>
                       If <code>string</code> is passed, context renderer with given name is being used. You can add new
@@ -279,6 +279,16 @@
                       arguments specified above.
 
                       <p class="mt-2">By default <code>labelField</code> is used to render visible text.</p>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <span class="label">disableHighlight:</span>
+                      <code>bool</code>
+                    </dt>
+                    <dd>
+                      Disable highlighting of input value in results. Can be useful with a <code>renderer</code> function 
+                      that includes additional text or does its own highlighting.
                     </dd>
                   </dl>
                 </div>
@@ -318,6 +328,12 @@
               <h4>&bull; Remote datasource &bull;</h4>
 
               <div id="example-6" class="example-wrap"></div>
+
+              <div class="mt-2">
+                Sometimes can be useful, especially in <em>fetch</em> mode, when entered text stays even when input loses focus.
+                And by default when input is empty, fetched results (if fetched based on search input) are cleared.
+              </div>
+
               <details class="mt-2">
 
                 <summary class="label label-rounded c-hand">Related properties:</summary>
@@ -345,6 +361,19 @@
                       If not specified, one of following properties are tried in given order: <code>data</code>,
                       <code>items</code>,
                       <code>options</code> or response JSON itself as a fallback.
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt><span class="label">fetchResetOnBlur:</span> <code>bool</code></dt>
+                    <dd>
+                      Reset previous search results on empty input.
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt><span class="label">disableSifter:</span> <code>bool</code></dt>
+                    <dd>
+                      Can be disabled (especially with fetch) when further filtering or sorting may be 
+                      undesired (due to server-side sorting & and filtering based on user input).
                     </dd>
                   </dl>
                 </div>
@@ -427,8 +456,8 @@ config.clearable = true;</code></pre>
 const OPTION_LIST = [
   'options', 'fetch', 'name', 'required', 'value',
   'multiple','disabled', 'max', 'creatable', 'delimiter',
-  'placeholder', 'renderer', 'searchable', 'clearable', 'fetch', 'value-field', 'label-field',
-  'anchor', 'virtual-list'
+  'placeholder', 'renderer', 'searchable', 'clearable', 'fetch', 'value-field', 'label-field', 'label-as-value',
+  'virtual-list', 'lazy'
 ];</code></pre>
 
                 <div class="label label-rounded"><b>Disclaimer</b></div>
@@ -564,10 +593,16 @@ const OPTION_LIST = [
                 <td>Property shown in dropdown (if not specified, will be selected automatically)</td>
               </tr>
               <tr>
+                <td>name</td>
+                <td>string</td>
+                <td><code>null</code></td>
+                <td>Create <code>&lt;select&gt;</code>, usable for normal forms.</td>
+              </tr>
+              <tr>
                 <td>required</td>
                 <td>bool</td>
                 <td><code>false</code></td>
-                <td>make sense only when <code>name</code> is defined</td>
+                <td>This property is passed to generated <code>&lt;select&gt;</code> element. Make sense only when <code>name</code> is defined</td>
               </tr>
               <tr>
                 <td>placeholder</td>
@@ -591,13 +626,19 @@ const OPTION_LIST = [
                 <td>renderer</td>
                 <td>string|function</td>
                 <td><code>null</code></td>
-                <td>dropdown and selection renderer function. More info in item rendering section</td>
+                <td>Dropdown and selection renderer function. More info in item rendering section</td>
               </tr>
               <tr>
                 <td>selectOnTab</td>
                 <td>bool</td>
                 <td><code>false</code></td>
                 <td>Allow selecting currently active item by <kbd>Tab</kbd> key</td>
+              </tr>
+              <tr>
+                <td>resetOnBlur</td>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>Control if input value should be cleared on blur</td>
               </tr>
               <tr>
                 <td>clearable</td>
@@ -625,12 +666,6 @@ const OPTION_LIST = [
                 <td>collapse selection when <code>multiple</code> and not focused</td>
               </tr>
               <tr>
-                <td>name</td>
-                <td>string</td>
-                <td><code>null</code></td>
-                <td>create <code>&lt;select&gt;</code>, usable for normal forms.</td>
-              </tr>
-              <tr>
                 <td>anchor</td>
                 <td>string</td>
                 <td><code>null</code></td>
@@ -652,7 +687,7 @@ const OPTION_LIST = [
                 <td>delimiter</td>
                 <td>string</td>
                 <td><code>','</code></td>
-                <td>split inserted text when pasting to create multiple items</td>
+                <td>Split inserted text when pasting to create multiple items</td>
               </tr>
               <tr>
                 <td>fetch</td>
@@ -671,7 +706,13 @@ const OPTION_LIST = [
                 <td>fetchCallback</td>
                 <td>function</td>
                 <td><code>null</code></td>
-                <td>optional fetch callback</td>
+                <td>Optional fetch callback</td>
+              </tr>
+              <tr>
+                <td>fetchResetOnBlur</td>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>Reset previous search results on empty input, related to <code>resetOnBlur</code></td>
               </tr>
               <tr>
                 <td>lazyDropdown</td>
@@ -715,13 +756,13 @@ const OPTION_LIST = [
                 <td>class</td>
                 <td>string</td>
                 <td><code>'svelecte-control'</code></td>
-                <td>default css class</td>
+                <td>Default css class</td>
               </tr>
               <tr>
                 <td>style</td>
                 <td>string</td>
-                <td>null</td>
-                <td>inline style</td>
+                <td><code>null</code></td>
+                <td>Inline style</td>
               </tr>
             </tbody>
             <tbody>
@@ -804,9 +845,9 @@ const OPTION_LIST = [
               <tr>
                 <td>addFormatter</td>
                 <td>function</td>
+                <td>-</td>
                 <td><strong>context function</strong>: with signature <code>(name, formatFn)</code> you can add
-                  additional item renderers (formatters)</td>
-                <td></td>
+                  additional item renderers (formatters). More details in <a href="#item-rendering">Custom rendering example</a></td>
               </tr>
             </tbody>
           </table>
