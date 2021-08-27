@@ -5,7 +5,7 @@
 
 Serves as documentation page for [svelecte](https://github.com/mskocik/svelecte) and [svelecte-element](https://github.com/mskocik/svelecte-element) components.
 
-Currently documented versions: ![svelecte](https://img.shields.io/badge/svelecte-v1.3.5-green) ![svelecte-element](https://img.shields.io/badge/element-v1.3.6-green)
+Currently documented versions: ![svelecte](https://img.shields.io/badge/svelecte-v1.3.6-green) ![svelecte-element](https://img.shields.io/badge/element-v1.3.6-green)
 
 
 ### Demo database for remote fetch examples
