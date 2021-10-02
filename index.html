@@ -73,6 +73,7 @@
               <li class="divider" data-content="Custom element"></li>
               <li class="menu-item"><a href="#custom-element">Setup custom element</a></li>
               <li class="menu-item my-0"><a href="#dependent-selects">Dependent selects</a></li>
+              <li class="menu-item my-0"><a href="#remote">Remote (ajax) datasource</a></li>
               <li class="menu-item my-0"><a href="#with-vue"> With Vue.js</a></li>
               <li class="divider" data-content="Configuration"></li>
               <li class="menu-item"><a href="#options">Options</a></li>
@@ -102,8 +103,8 @@
 
             <p class="mt-2">
               <span>Documentation for:</span>
-              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.3.6-green" alt="svelecte version" class="middle-img"></a>
-              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.3.6-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.4.1-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.4.1-green" alt="svelecte version" class="middle-img"></a>
             </p>
 
             <hr>
@@ -537,12 +538,27 @@ const OPTION_LIST = [
             </div>
           </div>
 
+          <div class="section" id="remote">
+            <div class="columns">
+              <div class="column col-lg-12 col-xl-6 col-6">
+                <h4>Remote (ajax) datasource</h4>
+                <div id="example-10" class="example-wrap"></div>
+              </div>
+              <div class="column col-lg-12 col-xl-6 col-6">
+                <details>
+                  <summary class="label label-rounded c-hand">Show code</summary>
+                  <pre data-src="10-custom-remote"></pre>
+                </details>
+              </div>
+            </div>
+          </div>
+
           <div class="section" id="with-vue">
             <div class="columns">
               <div class="column col-lg-12 col-xl-6 col-6">
 
                 <h4>&bull; Usage with Vue.js &bull;</h4>
-                <div id="example-10"></div>
+                <div id="example-11"></div>
 
                 <p>It is very easy to use Svelecte with Vue.js. You only need to add Svelecte element to
                   <code>ignoredElements</code> for Vue 2 or handle in in <code>isCustomElement</code> in Vue 3.<br>
@@ -553,7 +569,7 @@ const OPTION_LIST = [
               <div class="column col-lg-12 col-xl-6 col-6">
                 <details>
                   <summary class="label label-rounded c-hand">Show code</summary>
-                  <pre data-src="10-vue"></pre>
+                  <pre data-src="11-vue"></pre>
                 </details>
               </div>
             </div>
@@ -804,6 +820,12 @@ const OPTION_LIST = [
                 <td colspan="2">change</td>
                 <td>selection</td>
                 <td>selected objects * if <code>anchor</code> is defined, <code>change</code> event is called also on it
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">createoption</td>
+                <td>option</td>
+                <td>newly created option object
                 </td>
               </tr>
             </tbody>

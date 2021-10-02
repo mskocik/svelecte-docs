@@ -8,9 +8,10 @@ import Fetch from './examples/06-fetch.svelte';
 import Playground from './examples/07-playground.svelte';
 import Element from './examples/08-custom-element.svelte';
 import Dependent from './examples/09-custom-dependent.svelte';
-import Vue from './examples/10-vue.svelte';
+import Remote from './examples/10-custom-remote.svelte';
+import Vue from './examples/11-vue.svelte';
 
-[BasicExample, BasicExampleExt, Groups, ItemRender, Slot, Fetch, Playground, Element, Dependent, Vue]
+[BasicExample, BasicExampleExt, Groups, ItemRender, Slot, Fetch, Playground, Element, Dependent, Remote, Vue]
   .forEach(
     (component, index) => new component({
       target: document.getElementById(`example-${index +1}`),
