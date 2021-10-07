@@ -45,7 +45,9 @@
   let { 
     multiple, max, collapseSelection,
     placeholder, searchable, clearable, selectOnTab,
-    disabled, creatable, creatablePrefix, delimiter, virtualList,
+    disabled,
+    creatable, creatablePrefix, allowEditing, keepCreated, delimiter,
+    virtualList,
     style, searchField
   } = config;
   let settings = {
@@ -83,7 +85,7 @@
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab,
-        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        disabled, creatable, creatablePrefix, allowEditing, keepCreated, delimiter, virtualList,
         style,
         class: classSelection,
         options: dataset.colors(),
@@ -100,7 +102,7 @@
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab,
-        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        disabled, creatable, creatablePrefix, allowEditing, keepCreated, delimiter, virtualList,
         style,
         class: classSelection,
         options: dataset.countries(),
@@ -111,7 +113,7 @@
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab,
-        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        disabled, creatable, creatablePrefix, allowEditing, keepCreated, delimiter, virtualList,
         style,
         class: classSelection,
         options: dataset.countryGroups(),
@@ -122,7 +124,7 @@
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab,
-        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        disabled, creatable, creatablePrefix, allowEditing, keepCreated, delimiter, virtualList,
         style,
         searchField: remoteValue === 'json' ? ['name', 'email'] : null,
         class: classSelection,
@@ -136,7 +138,7 @@
       settings = {
         multiple, max, collapseSelection,
         searchable, clearable, selectOnTab, placeholder,
-        disabled, creatable, creatablePrefix, delimiter, virtualList,
+        disabled, creatable, creatablePrefix, allowEditing, keepCreated, delimiter, virtualList,
         style,
         class: classSelection,
         fetch: null,
@@ -238,7 +240,12 @@
       <legend>Customize</legend>
       <div class="columns">
         <div class="col">
-
+          <fieldset>
+            <legend>Control</legend>
+            <label><input type="checkbox" on:change={e => s('disabled', e.target.checked)} bind:checked={disabled}> Disabled</label><br>
+            <label><input type="checkbox" on:change={e => s('virtualList', e.target.checked)} bind:checked={virtualList}> Use virtual list</label><br>
+            <button class="btn mt-2" on:click={() => { myValue = settings.multiple ? [] : null } }>Clear selection</button>
+          </fieldset>
           <fieldset>
             <legend>Options</legend>
             <Svelecte options={optionsList} bind:selection={dataSrc} style="width: 195px" on:change={() => {myValue = multiple ? [] : null}}></Svelecte>
@@ -257,49 +264,57 @@
             </select>
           </fieldset>
         </div>
-
-        <fieldset>
-          <legend>Control</legend>
-          <label><input type="checkbox" on:change={e => s('disabled', e.target.checked)} bind:checked={disabled}> Disabled</label><br>
-          <label><input type="checkbox" on:change={e => s('creatable', e.target.checked)}  bind:checked={creatable}> Creatable</label>
-          <span class="tooltip" data-tooltip="prefix that is shown
-when creating new items">
-            <input class="input-sm input-short" placeholder="Item prefix" on:input={e => s('creatablePrefix', e.target.value)} disabled={!settings.creatable}  bind:value={creatablePrefix}></span>
-          <span class="tooltip" data-tooltip="Delimiter character for new items
-(when pasting etc.)">
-            <input class="input-sm input-short" placeholder="Delimiter" on:input={e => s('delimiter', e.target.value)} disabled={!settings.creatable}  bind:value={delimiter}></span><br>
-          <label><input type="checkbox" on:change={e => s('virtualList', e.target.checked)} bind:checked={virtualList}> Use virtual list</label><br>
-          <button class="btn mt-2" on:click={() => { myValue = settings.multiple ? [] : null } }>Clear selection</button>
-        </fieldset>
-
-        <fieldset>
-          <legend>Multiple</legend>
-          <label><input type="checkbox" on:change={e => s('multiple', e.target.checked)}  bind:checked={multiple}> Multiple</label>
-          <span class="tooltip" data-tooltip="Limit selection count"><input class="input-sm" type="number" placeholder="limit" disabled={!settings.multiple} on:input={e => s('max', parseInt(e.target.value))} min="0" bind:value={max}></span>
-          <br>
-          <label class="tooltip" data-tooltip="Show only selection sum string"><input type="checkbox" on:change={e => s('collapseSelection', e.target.checked) } disabled={!settings.multiple} bind:checked={collapseSelection}> Collapse selection</label>
+        <div class="col">
+          <fieldset>
+            <legend>Multiple</legend>
+            <label><input type="checkbox" on:change={e => s('multiple', e.target.checked)}  bind:checked={multiple}> Multiple</label>
+            <span class="tooltip" data-tooltip="Limit selection count"><input class="input-sm" type="number" placeholder="limit" disabled={!settings.multiple} on:input={e => s('max', parseInt(e.target.value))} min="0" bind:value={max}></span>
+            <br>
+            <label class="tooltip" data-tooltip="Show only selection sum string"><input type="checkbox" on:change={e => s('collapseSelection', e.target.checked) } disabled={!settings.multiple} bind:checked={collapseSelection}> Collapse selection</label>
+            <hr>
+            <label><input type="checkbox" bind:checked={isFlexWidth}> Inline width</label>
+          </fieldset>
           
-        </fieldset>
-        
-        <fieldset>
-          <legend>UI</legend>
-          Placeholder <input class="input-sm" on:input={e => s('placeholder', e.target.value)} bind:value={settings.placeholder}><br>
-          <label><input type="checkbox" on:change={e => s('searchable', e.target.checked)} bind:checked={searchable}> Searchable</label><br>
-          <label><input type="checkbox" on:change={e => s('clearable', e.target.checked)} bind:checked={clearable}> Clearable</label><br>
-          <label><input type="checkbox" on:change={e => s('selectOnTab', e.target.checked)} bind:checked={selectOnTab}> Select on <kbd>Tab</kbd></label>
-          <hr>
-          <label><input type="checkbox" bind:checked={isFlexWidth}> Inline width</label>
-        </fieldset>
+          <fieldset>
+            <legend>Creatable</legend>
+            <label><input type="checkbox" on:change={e => s('creatable', e.target.checked)}  bind:checked={creatable}> Creatable</label><br>
+            <span class="tooltip" data-tooltip="prefix that is shown
+when creating new items">
+              <input class="input-sm input-short" placeholder="Item prefix" on:input={e => s('creatablePrefix', e.target.value)} disabled={!settings.creatable}  bind:value={creatablePrefix}></span>
+            <span class="tooltip" data-tooltip="Delimiter character for new items
+(when pasting etc.)">
+            <input class="input-sm input-short" placeholder="Delimiter" on:input={e => s('delimiter', e.target.value)} disabled={!settings.creatable}  bind:value={delimiter}>
+            </span><br>
+            <span class="tooltip" data-tooltip="Edit created item when backspace is pressed
+(normally remove selected item)">
+              <label><input type="checkbox" on:change={e => s('allowEditing', e.target.checked)}  bind:checked={allowEditing}> Allow editing</label><br>
+            </span>
+            <span class="tooltip" data-tooltip="Keep created item in options dropdown">
+              <label><input type="checkbox" on:change={e => s('keepCreated', e.target.checked)}  bind:checked={keepCreated}> Keep created options</label><br>
+            </span>
+          </fieldset>
+        </div>
 
-        <fieldset>
-          <legend>Styling</legend>
-          <span>CSS class</span>
-          <select on:change={e => s('class', e.target.value)} bind:value={classSelection} on:blur>
-            <option value="svelecte-control">svelecte-control (default)</option>
-            <option value="svelecte-control custom-css">red style (custom)</option>
-          </select>
+        <div class="col">
+          <fieldset>
+            <legend>UI</legend>
+            Placeholder <input class="input-sm" on:input={e => s('placeholder', e.target.value)} bind:value={settings.placeholder}><br>
+            <label><input type="checkbox" on:change={e => s('searchable', e.target.checked)} bind:checked={searchable}> Searchable</label><br>
+            <label><input type="checkbox" on:change={e => s('clearable', e.target.checked)} bind:checked={clearable}> Clearable</label><br>
+            <label><input type="checkbox" on:change={e => s('selectOnTab', e.target.checked)} bind:checked={selectOnTab}> Select on <kbd>Tab</kbd></label>
+            
+          </fieldset>
 
-        </fieldset>
+          <fieldset>
+            <legend>Styling</legend>
+            <span>CSS class</span>
+            <select on:change={e => s('class', e.target.value)} bind:value={classSelection} on:blur>
+              <option value="svelecte-control">svelecte-control (default)</option>
+              <option value="svelecte-control custom-css">red style (custom)</option>
+            </select>
+
+          </fieldset>
+        </div>
       </div>
     </fieldset>
   </div>

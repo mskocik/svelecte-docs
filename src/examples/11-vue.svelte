@@ -15,12 +15,15 @@
         methods: {
           onChange: function(e) {
             this.selected = e.target.value;
+          },
+          show: function(e) {
+            console.log(e.detail);
           }
         },
         template: `<div>
           <h6>Vue 2 example</h6>
           <div>
-            <el-svelecte :options="opts"  @change="onChange"
+            <el-svelecte :options="opts"  @change="onChange" @createoption="show"
               :value="selected"
               :placeholder="placeholder"
               multiple creatable

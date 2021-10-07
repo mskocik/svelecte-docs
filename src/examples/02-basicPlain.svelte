@@ -11,9 +11,9 @@
   let value = null;
 </script>
 
-<Svelecte {options} {labelAsValue} 
-  bind:selection={selection} 
-  bind:value={value} 
+<Svelecte {options} {labelAsValue}
+  bind:selection={selection}
+  bind:value={value}
   placeholder="Select country"
 ></Svelecte>
 

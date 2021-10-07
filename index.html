@@ -103,8 +103,8 @@
 
             <p class="mt-2">
               <span>Documentation for:</span>
-              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v1.4.1-green" alt="svelecte version" class="middle-img"></a>
-              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.4.1-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte"><img src="https://img.shields.io/badge/svelecte-v2.0.0-green" alt="svelecte version" class="middle-img"></a>
+              <a href="https://github.com/mskocik/svelecte-element"><img src="https://img.shields.io/badge/element-v1.4.1-orange" alt="svelecte version" class="middle-img"></a>
             </p>
 
             <hr>
@@ -616,6 +616,12 @@ const OPTION_LIST = [
                 <td>Property shown in dropdown (if not specified, will be selected automatically)</td>
               </tr>
               <tr>
+                <td>disabledField</td>
+                <td>string</td>
+                <td><code>$disabled</code></td>
+                <td>Property shown in dropdown (if not specified, will be selected automatically)</td>
+              </tr>
+              <tr>
                 <td>name</td>
                 <td>string</td>
                 <td><code>null</code></td>
@@ -630,7 +636,7 @@ const OPTION_LIST = [
               <tr>
                 <td>placeholder</td>
                 <td>string</td>
-                <td><code>'Select'</code></td>
+                <td><code>Select</code></td>
                 <td>Input placeholder</td>
               </tr>
               <tr>
@@ -703,13 +709,25 @@ const OPTION_LIST = [
               <tr>
                 <td>creatablePrefix</td>
                 <td>string</td>
-                <td><code>'*'</code></td>
+                <td><code>*</code></td>
                 <td>Prefix marking new item</td>
+              </tr>
+              <tr>
+                <td>allowEditing</td>
+                <td>bool</td>
+                <td><code>false</code></td>
+                <td>When pressing <code>Backspace</code> switch to edit mode instead of removing newly created item</td>
+              </tr>
+              <tr>
+                <td>keepCreated</td>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>Switch whether to add newly created option to option list or not</td>
               </tr>
               <tr>
                 <td>delimiter</td>
                 <td>string</td>
-                <td><code>','</code></td>
+                <td><code>,</code></td>
                 <td>Split inserted text when pasting to create multiple items</td>
               </tr>
               <tr>
@@ -721,7 +739,7 @@ const OPTION_LIST = [
               <tr>
                 <td>fetchMode</td>
                 <td>string</td>
-                <td><code>'auto'</code></td>
+                <td><code>auto</code></td>
                 <td>When set to <code>init</code> options are fetched only when mounted, when searching it search in
                   downloaded dataset</td>
               </tr>
